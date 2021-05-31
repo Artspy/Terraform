@@ -1,0 +1,11 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: fitverse-certificate
+spec:
+  dnsNames:
+    - fitverse.pl
+  secretName: fitverse-secret-tls
+  issuerRef:
+    name: fitverse-cluster-issuer
+    kind: ClusterIssuer
