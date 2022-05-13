@@ -1,10 +1,10 @@
 #-------------------> Authentication to Microsoft Azure
-provider "azurerm"{
-    subscription_id     = var.subscription_id
-    client_id           = var.client_id
-    client_secret       = var.client_secret
-    tenant_id           = var.tenant_id
-    features {}
+provider "azurerm" {
+  subscription_id = var.subscription_id
+  client_id       = var.client_id
+  client_secret   = var.client_secret
+  tenant_id       = var.tenant_id
+  features {}
 }
 
 #-------------------> Azure AKS cluster
@@ -32,7 +32,7 @@ resource "azurerm_kubernetes_cluster" "AKS-Fitverse" {
   #  client_id     = var.serviceprinciple_id
   #  client_secret = var.serviceprinciple_key
   #}
-  
+
   linux_profile {
     admin_username = "fitverse"
     ssh_key {
@@ -41,10 +41,10 @@ resource "azurerm_kubernetes_cluster" "AKS-Fitverse" {
   }
 
   network_profile {
-    network_plugin = "kubenet"
+    network_plugin    = "kubenet"
     load_balancer_sku = "Basic"
   }
-  
+
   tags = {
     Environment = var.tagprod
   }
@@ -74,11 +74,11 @@ resource "azurerm_managed_disk" "HD-PV-AKS" {
 
 #-------------------> Azure Container Registry for AKS
 resource "azurerm_container_registry" "CRFitverse" {
-  name                     = "CRFitverse"
-  resource_group_name      = azurerm_resource_group.RG-ContainerRegistry.name
-  location                 = azurerm_resource_group.RG-ContainerRegistry.location
-  sku                      = "Standard"
-  admin_enabled            = false
+  name                = "CRFitverse"
+  resource_group_name = azurerm_resource_group.RG-ContainerRegistry.name
+  location            = azurerm_resource_group.RG-ContainerRegistry.location
+  sku                 = "Standard"
+  admin_enabled       = false
 
   tags = {
     Environment = var.tagprod

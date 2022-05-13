@@ -11,13 +11,13 @@ resource "kubernetes_config_map" "configmap-rabbits" {
     kubernetes_namespace.namespace-rabbits
   ]
   metadata {
-    name = "rabbitmq-config"
+    name      = "rabbitmq-config"
     namespace = "rabbits"
   }
 
   data = {
 
-    "enabled_plugins" =  "[rabbitmq_federation,rabbitmq_management,rabbitmq_peer_discovery_k8s]."  
+    "enabled_plugins" = "[rabbitmq_federation,rabbitmq_management,rabbitmq_peer_discovery_k8s]."
 
     "rabbitmq.conf" = <<EOF
     loopback_users.guest = false
@@ -41,14 +41,14 @@ resource "kubernetes_secret" "secrets-rabbits" {
     kubernetes_namespace.namespace-rabbits
   ]
   metadata {
-    name = "rabbitmq-secret"
+    name      = "rabbitmq-secret"
     namespace = "rabbits"
   }
 
   data = {
-    RABBITMQ_DEFAULT_ADMIN_LOGIN = "guest"
+    RABBITMQ_DEFAULT_ADMIN_LOGIN    = "guest"
     RABBITMQ_DEFAULT_ADMIN_PASSWORD = "guest"
-    RABBITMQ_ERLANG_COOKIE = "RU9KdmZFMURJOUVReHhlTEVuckY="
+    RABBITMQ_ERLANG_COOKIE          = "RU9KdmZFMURJOUVReHhlTEVuckY="
   }
 
   type = "Opaque"
@@ -60,7 +60,7 @@ resource "kubernetes_service_account" "service_account-rabbits" {
     kubernetes_namespace.namespace-rabbits
   ]
   metadata {
-    name = "rabbitmq-sa"
+    name      = "rabbitmq-sa"
     namespace = "rabbits"
   }
 }
@@ -71,14 +71,14 @@ resource "kubernetes_role" "roles-rabbits" {
     kubernetes_namespace.namespace-rabbits
   ]
   metadata {
-    name = "rabbitmq-role"
+    name      = "rabbitmq-role"
     namespace = "rabbits"
   }
 
   rule {
-    api_groups     = [""]
-    resources      = ["endpoints"]
-    verbs          = ["get", "list", "watch"]
+    api_groups = [""]
+    resources  = ["endpoints"]
+    verbs      = ["get", "list", "watch"]
   }
 }
 
@@ -130,18 +130,18 @@ resource "kubernetes_persistent_volume" "persistent_volume-rabbits" {
 #-----------------------------> STATEFULSET RABBITMQ
 resource "kubernetes_stateful_set" "statefulset-rabbits" {
   depends_on = [
-    kubernetes_namespace.namespace-rabbits, kubernetes_config_map.configmap-rabbits, kubernetes_secret.secrets-rabbits, kubernetes_service_account.service_account-rabbits, 
+    kubernetes_namespace.namespace-rabbits, kubernetes_config_map.configmap-rabbits, kubernetes_secret.secrets-rabbits, kubernetes_service_account.service_account-rabbits,
     kubernetes_role_binding.roles_bindings-rabbits, kubernetes_persistent_volume.persistent_volume-rabbits
   ]
 
   metadata {
-    name = "rabbitmq"
+    name      = "rabbitmq"
     namespace = "rabbits"
-      }
- 
+  }
+
   spec {
     service_name = "rabbitmq"
-    replicas = 2
+    replicas     = 2
 
     selector {
       match_labels = {
@@ -189,29 +189,29 @@ resource "kubernetes_stateful_set" "statefulset-rabbits" {
 
           port {
             container_port = 4369
-            name = "discovery"
+            name           = "discovery"
           }
 
-           port {
+          port {
             container_port = 5672
-            name = "amqp"
+            name           = "amqp"
           }
 
           port {
             container_port = 15672
-            name = "amqp-external"
+            name           = "amqp-external"
           }
 
           resources {
             requests = {
-              cpu    = "250m"
-              memory = "256Mi"
+              cpu               = "250m"
+              memory            = "256Mi"
               ephemeral-storage = "2Gi"
             }
 
             limits = {
-              cpu    = "350m"
-              memory = "256Mi"
+              cpu               = "350m"
+              memory            = "256Mi"
               ephemeral-storage = "4Gi"
             }
           }
@@ -221,7 +221,7 @@ resource "kubernetes_stateful_set" "statefulset-rabbits" {
             value_from {
               field_ref {
                 api_version = "v1"
-                field_path = "metadata.name"
+                field_path  = "metadata.name"
               }
             }
           }
@@ -231,7 +231,7 @@ resource "kubernetes_stateful_set" "statefulset-rabbits" {
             value_from {
               field_ref {
                 api_version = "v1"
-                field_path = "metadata.namespace"
+                field_path  = "metadata.namespace"
               }
             }
           }
@@ -241,29 +241,29 @@ resource "kubernetes_stateful_set" "statefulset-rabbits" {
             value_from {
               field_ref {
                 api_version = "v1"
-                field_path = "metadata.namespace"
+                field_path  = "metadata.namespace"
               }
             }
-           }
+          }
 
           env {
-            name = "RABBITMQ_NODENAME"
+            name  = "RABBITMQ_NODENAME"
             value = "rabbit@$(RABBIT_POD_NAME).rabbitmq.$(RABBIT_POD_NAMESPACE).svc.cluster.local"
-           }
+          }
 
           env {
-            name = "RABBITMQ_USE_LONGNAME"
+            name  = "RABBITMQ_USE_LONGNAME"
             value = "true"
           }
 
-          env {   
-            name = "K8S_HOSTNAME_SUFFIX"
-            value = ".rabbitmq.$(RABBIT_POD_NAMESPACE).svc.cluster.local"   
+          env {
+            name  = "K8S_HOSTNAME_SUFFIX"
+            value = ".rabbitmq.$(RABBIT_POD_NAMESPACE).svc.cluster.local"
           }
 
           env {
-            name = "RABBITMQ_CONFIG_FILE"
-            value = "/config/rabbitmq"       
+            name  = "RABBITMQ_CONFIG_FILE"
+            value = "/config/rabbitmq"
           }
 
           env {
@@ -271,7 +271,7 @@ resource "kubernetes_stateful_set" "statefulset-rabbits" {
             value_from {
               secret_key_ref {
                 name = "rabbitmq-secret"
-                key = "RABBITMQ_DEFAULT_ADMIN_LOGIN"
+                key  = "RABBITMQ_DEFAULT_ADMIN_LOGIN"
               }
             }
           }
@@ -281,17 +281,17 @@ resource "kubernetes_stateful_set" "statefulset-rabbits" {
             value_from {
               secret_key_ref {
                 name = "rabbitmq-secret"
-                key = "RABBITMQ_DEFAULT_ADMIN_PASSWORD"
+                key  = "RABBITMQ_DEFAULT_ADMIN_PASSWORD"
               }
             }
-          } 
+          }
 
           env {
             name = "RABBITMQ_ERLANG_COOKIE"
             value_from {
               secret_key_ref {
                 name = "rabbitmq-secret"
-                key = "RABBITMQ_ERLANG_COOKIE"
+                key  = "RABBITMQ_ERLANG_COOKIE"
               }
             }
           }
@@ -314,21 +314,21 @@ resource "kubernetes_stateful_set" "statefulset-rabbits" {
           }
 
         }
-      volume {
+        volume {
           name = "config-file"
-      }
+        }
 
-      volume {
+        volume {
           name = "plugins-file"
-      }
+        }
 
-      volume {
+        volume {
           name = "config"
           config_map {
             name = "rabbitmq-config"
           }
+        }
       }
-    }
     }
     volume_claim_template {
       metadata {
@@ -336,7 +336,7 @@ resource "kubernetes_stateful_set" "statefulset-rabbits" {
       }
 
       spec {
-        access_modes       = ["ReadWriteOnce"]
+        access_modes = ["ReadWriteOnce"]
 
         resources {
           requests = {
@@ -354,7 +354,7 @@ resource "kubernetes_service" "service-rabbits" {
     kubernetes_stateful_set.statefulset-rabbits, kubernetes_namespace.namespace-rabbits
   ]
   metadata {
-    name = "rabbitmq"
+    name      = "rabbitmq"
     namespace = "rabbits"
   }
   spec {
@@ -362,17 +362,17 @@ resource "kubernetes_service" "service-rabbits" {
     port {
       port        = 4369
       target_port = 4369
-      name = "discovery"
+      name        = "discovery"
     }
     port {
       port        = 5672
       target_port = 5672
-      name = "amqp"
+      name        = "amqp"
     }
     port {
       port        = 15672
       target_port = 15672
-      name = "amqp-external"
+      name        = "amqp-external"
     }
     selector = {
       app = "rabbitmq"

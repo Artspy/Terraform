@@ -1,17 +1,17 @@
 #-----------------------------> INGRESS AKS-FITVERSE
 resource "kubernetes_ingress" "ingress-fitverse" {
   metadata {
-    name        = "ingress"
-    annotations = { 
+    name = "ingress"
+    annotations = {
       "kubernetes.io/ingress.class" = "nginx"
     }
   }
 
   spec {
-   tls {
-    hosts =  ["fitverse.pl"]
+    tls {
+      hosts       = ["fitverse.pl"]
       secret_name = "fitverse-secret-tls"
-   }
+    }
     rule {
       host = "fitverse.pl"
       http {
@@ -61,19 +61,19 @@ resource "kubernetes_ingress" "ingress-fitverse" {
 
 #-----------------------------> HELM PROVIDER FOR NGINX INGRESS CONTROLLER
 provider "helm" {
-    kubernetes {
-        host                   = azurerm_kubernetes_cluster.AKS-Fitverse.kube_config.0.host
-        client_key             = base64decode(azurerm_kubernetes_cluster.AKS-Fitverse.kube_config.0.client_key)
-        client_certificate     = base64decode(azurerm_kubernetes_cluster.AKS-Fitverse.kube_config.0.client_certificate)
-        cluster_ca_certificate = base64decode(azurerm_kubernetes_cluster.AKS-Fitverse.kube_config.0.cluster_ca_certificate)
-    }  
+  kubernetes {
+    host                   = azurerm_kubernetes_cluster.AKS-Fitverse.kube_config.0.host
+    client_key             = base64decode(azurerm_kubernetes_cluster.AKS-Fitverse.kube_config.0.client_key)
+    client_certificate     = base64decode(azurerm_kubernetes_cluster.AKS-Fitverse.kube_config.0.client_certificate)
+    cluster_ca_certificate = base64decode(azurerm_kubernetes_cluster.AKS-Fitverse.kube_config.0.cluster_ca_certificate)
+  }
 }
 
 
 #-----------------------------> NGINX INGRESS CONTROLLER AKS-FITVERSE
 resource "helm_release" "nginx_ingress" {
-    name      = "nginx-ingress-controller"
-    repository = "https://charts.bitnami.com/bitnami"
-    chart      = "nginx-ingress-controller"
+  name       = "nginx-ingress-controller"
+  repository = "https://charts.bitnami.com/bitnami"
+  chart      = "nginx-ingress-controller"
 
 }

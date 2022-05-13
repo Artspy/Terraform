@@ -6,7 +6,7 @@ resource "kubernetes_deployment" "membersservice" {
   metadata {
     name = "membersservice-deployment"
     labels = {
-      app = "MembersService"
+      app  = "MembersService"
       name = "membersservice"
     }
   }
@@ -24,7 +24,7 @@ resource "kubernetes_deployment" "membersservice" {
       type = "RollingUpdate"
       rolling_update {
         max_unavailable = "25%"
-        max_surge = "50%"
+        max_surge       = "50%"
       }
     }
 
@@ -41,11 +41,11 @@ resource "kubernetes_deployment" "membersservice" {
           image = "-"
           port {
             container_port = 5003
-            name = "ms-port"
+            name           = "ms-port"
           }
           port {
             container_port = 80
-            name = "health-port"
+            name           = "health-port"
           }
           resources {
             requests = {
@@ -66,7 +66,7 @@ resource "kubernetes_deployment" "membersservice" {
 #-----------------------------> SERVICE MEMBERSSERVICE
 resource "kubernetes_service" "service-membersservice" {
   depends_on = [
-  kubernetes_deployment.membersservice
+    kubernetes_deployment.membersservice
   ]
   metadata {
     name = "ms-service"
@@ -74,11 +74,11 @@ resource "kubernetes_service" "service-membersservice" {
   spec {
     type = "ClusterIP"
     port {
-      port          = 83
-      target_port   = 5003
-      name          = "ms-port"
+      port        = 83
+      target_port = 5003
+      name        = "ms-port"
     }
-    
+
     selector = {
       app = "MembersService"
     }
@@ -93,7 +93,7 @@ resource "kubernetes_deployment" "agreementsservice" {
   metadata {
     name = "agreementsservice-deployment"
     labels = {
-      app = "AgreementsService"
+      app  = "AgreementsService"
       name = "agreementsservice"
     }
   }
@@ -111,7 +111,7 @@ resource "kubernetes_deployment" "agreementsservice" {
       type = "RollingUpdate"
       rolling_update {
         max_unavailable = "25%"
-        max_surge = "50%"
+        max_surge       = "50%"
       }
     }
 
@@ -128,11 +128,11 @@ resource "kubernetes_deployment" "agreementsservice" {
           image = "-"
           port {
             container_port = 5005
-            name = "as-port"
+            name           = "as-port"
           }
           port {
             container_port = 80
-            name = "health-port"
+            name           = "health-port"
           }
           resources {
             requests = {
@@ -153,7 +153,7 @@ resource "kubernetes_deployment" "agreementsservice" {
 #-----------------------------> SERVICE AGREEMENTSSERVICE
 resource "kubernetes_service" "service-agreementsservice" {
   depends_on = [
-  kubernetes_deployment.agreementsservice
+    kubernetes_deployment.agreementsservice
   ]
   metadata {
     name = "as-service"
@@ -161,11 +161,11 @@ resource "kubernetes_service" "service-agreementsservice" {
   spec {
     type = "ClusterIP"
     port {
-      port          = 85
-      target_port   = 5005
-      name          = "as-port"
+      port        = 85
+      target_port = 5005
+      name        = "as-port"
     }
-    
+
     selector = {
       app = "AgreementsService"
     }
@@ -180,7 +180,7 @@ resource "kubernetes_deployment" "calendarservice" {
   metadata {
     name = "calendarservice-deployment"
     labels = {
-      app = "CalendarService"
+      app  = "CalendarService"
       name = "calendarservice"
     }
   }
@@ -198,7 +198,7 @@ resource "kubernetes_deployment" "calendarservice" {
       type = "RollingUpdate"
       rolling_update {
         max_unavailable = "25%"
-        max_surge = "50%"
+        max_surge       = "50%"
       }
     }
 
@@ -215,11 +215,11 @@ resource "kubernetes_deployment" "calendarservice" {
           image = "-"
           port {
             container_port = 5007
-            name = "cs-port"
+            name           = "cs-port"
           }
           port {
             container_port = 80
-            name = "health-port"
+            name           = "health-port"
           }
           resources {
             requests = {
@@ -240,7 +240,7 @@ resource "kubernetes_deployment" "calendarservice" {
 #-----------------------------> SERVICE CALENDARSERVICE
 resource "kubernetes_service" "service-calendarservice" {
   depends_on = [
-  kubernetes_deployment.calendarservice
+    kubernetes_deployment.calendarservice
   ]
   metadata {
     name = "cs-service"
@@ -248,11 +248,11 @@ resource "kubernetes_service" "service-calendarservice" {
   spec {
     type = "ClusterIP"
     port {
-      port          = 87
-      target_port   = 5007
-      name          = "cs-port"
+      port        = 87
+      target_port = 5007
+      name        = "cs-port"
     }
-    
+
     selector = {
       app = "CalendarService"
     }
@@ -266,7 +266,7 @@ resource "kubernetes_deployment" "client" {
   metadata {
     name = "client-deployment"
     labels = {
-      app = "client"
+      app  = "client"
       name = "client"
     }
   }
@@ -284,7 +284,7 @@ resource "kubernetes_deployment" "client" {
       type = "RollingUpdate"
       rolling_update {
         max_unavailable = "25%"
-        max_surge = "50%"
+        max_surge       = "50%"
       }
     }
 
@@ -301,11 +301,11 @@ resource "kubernetes_deployment" "client" {
           image = "-"
           port {
             container_port = 80
-            name = "client-port"
+            name           = "client-port"
           }
           port {
             container_port = 80
-            name = "health-port"
+            name           = "health-port"
           }
           resources {
             requests = {
@@ -326,7 +326,7 @@ resource "kubernetes_deployment" "client" {
 #-----------------------------> SERVICE CLIENT
 resource "kubernetes_service" "service-client" {
   depends_on = [
-  kubernetes_deployment.client
+    kubernetes_deployment.client
   ]
   metadata {
     name = "client-service"
@@ -334,11 +334,11 @@ resource "kubernetes_service" "service-client" {
   spec {
     type = "ClusterIP"
     port {
-      port          = 88
-      target_port   = 80
-      name          = "client-port"
+      port        = 88
+      target_port = 80
+      name        = "client-port"
     }
-    
+
     selector = {
       app = "client"
     }
@@ -353,7 +353,7 @@ resource "kubernetes_deployment" "authservice" {
   metadata {
     name = "authservice-deployment"
     labels = {
-      app = "AuthService"
+      app  = "AuthService"
       name = "authservice"
     }
   }
@@ -371,7 +371,7 @@ resource "kubernetes_deployment" "authservice" {
       type = "RollingUpdate"
       rolling_update {
         max_unavailable = "25%"
-        max_surge = "50%"
+        max_surge       = "50%"
       }
     }
 
@@ -388,11 +388,11 @@ resource "kubernetes_deployment" "authservice" {
           image = "-"
           port {
             container_port = 5009
-            name = "as-port"
+            name           = "as-port"
           }
           port {
             container_port = 80
-            name = "health-port"
+            name           = "health-port"
           }
           resources {
             requests = {
@@ -413,7 +413,7 @@ resource "kubernetes_deployment" "authservice" {
 #-----------------------------> SERVICE AUTHSERVICE
 resource "kubernetes_service" "service-authservice" {
   depends_on = [
-  kubernetes_deployment.authservice
+    kubernetes_deployment.authservice
   ]
   metadata {
     name = "auth-service"
@@ -421,11 +421,11 @@ resource "kubernetes_service" "service-authservice" {
   spec {
     type = "ClusterIP"
     port {
-      port          = 89
-      target_port   = 5009
-      name          = "auth-port"
+      port        = 89
+      target_port = 5009
+      name        = "auth-port"
     }
-    
+
     selector = {
       app = "AuthService"
     }

@@ -13,11 +13,11 @@ resource "kubernetes_horizontal_pod_autoscaler" "HPA-Membersservice" {
 
     scale_target_ref {
       api_version = "apps/v1"
-      kind = "Deployment"
-      name = "membersservice-deployment"
+      kind        = "Deployment"
+      name        = "membersservice-deployment"
     }
     target_cpu_utilization_percentage = "85"
-    
+
   }
 }
 
@@ -36,11 +36,11 @@ resource "kubernetes_horizontal_pod_autoscaler" "HPA-Agreementsservice" {
 
     scale_target_ref {
       api_version = "apps/v1"
-      kind = "Deployment"
-      name = "agreementsservice-deployment"
+      kind        = "Deployment"
+      name        = "agreementsservice-deployment"
     }
     target_cpu_utilization_percentage = "85"
-    
+
   }
 }
 
@@ -59,11 +59,11 @@ resource "kubernetes_horizontal_pod_autoscaler" "HPA-Calendarservice" {
 
     scale_target_ref {
       api_version = "apps/v1"
-      kind = "Deployment"
-      name = "calendarservice-deployment"
+      kind        = "Deployment"
+      name        = "calendarservice-deployment"
     }
     target_cpu_utilization_percentage = "85"
-    
+
   }
 }
 
@@ -82,8 +82,8 @@ resource "kubernetes_horizontal_pod_autoscaler" "HPA-Client" {
 
     scale_target_ref {
       api_version = "apps/v1"
-      kind = "Deployment"
-      name = "client-deployment"
+      kind        = "Deployment"
+      name        = "client-deployment"
     }
     target_cpu_utilization_percentage = "85"
 
@@ -105,8 +105,8 @@ resource "kubernetes_horizontal_pod_autoscaler" "HPA-AuthService" {
 
     scale_target_ref {
       api_version = "apps/v1"
-      kind = "Deployment"
-      name = "authservice-deployment"
+      kind        = "Deployment"
+      name        = "authservice-deployment"
     }
     target_cpu_utilization_percentage = "85"
 

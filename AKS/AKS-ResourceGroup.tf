@@ -1,20 +1,20 @@
 #-------------------> Resource group for AKS 
 resource "azurerm_resource_group" "RG-KUBERNETES" {
   name     = "RG-KUBERNETES"
-  location =  var.region
+  location = var.region
 
   tags = {
-      environment = var.tagprod
+    environment = var.environment
   }
 }
 
 #-------------------> Resource group for MSSQL 
 resource "azurerm_resource_group" "RG-DATABASES" {
   name     = "RG-DATABASES"
-  location =  var.region
+  location = var.region
 
   tags = {
-      environment = var.tagprod
+    environment = var.tagprod
   }
 }
 
@@ -24,6 +24,6 @@ resource "azurerm_resource_group" "RG-ContainerRegistry" {
   location = var.region
 
   tags = {
-      environment = var.tagprod
+    environment = var.tagprod
   }
 }
